@@ -2,12 +2,13 @@ package com.example.haveuser.domain.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.example.haveuser.domain.enums.SexoEnum;
 import com.example.haveuser.domain.enums.TipoPessoaEnum;
 
-@Entity
+@Entity(indices = {@Index(value = {"user_name"},unique = true)})
 public class UserEntity {
 
     @PrimaryKey(autoGenerate = true)
@@ -35,6 +36,23 @@ public class UserEntity {
 
     @ColumnInfo(name = "cpf_cnpj")
     private String cpfCnpj;
+
+    public UserEntity(
+            String nome, String userName, String password,
+            String foto, String endereco, String email,
+            String dataNascimento, SexoEnum sexo,
+            TipoPessoaEnum tipo, String cpfCnpj) {
+        this.nome = nome;
+        this.userName = userName;
+        this.password = password;
+        this.foto = foto;
+        this.endereco = endereco;
+        this.email = email;
+        this.dataNascimento = dataNascimento;
+        this.sexo = sexo;
+        this.tipo = tipo;
+        this.cpfCnpj = cpfCnpj;
+    }
 
     public int getUid() {
         return uid;

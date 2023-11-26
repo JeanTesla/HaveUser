@@ -9,27 +9,27 @@
     android:background="#000000">
 
     <TextView
-        android:id="@+id/textView23"
+        android:id="@+id/birthDateDetail"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="56dp"
         android:layout_marginTop="16dp"
         android:text="Tipo pessoa:"
         app:layout_constraintStart_toEndOf="@+id/textView14"
-        app:layout_constraintTop_toBottomOf="@+id/textView22" />
+        app:layout_constraintTop_toBottomOf="@+id/sexDetail" />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/sexDetail"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="132dp"
         android:layout_marginTop="16dp"
         android:text="Tipo pessoa:"
         app:layout_constraintStart_toEndOf="@+id/textView15"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+        app:layout_constraintTop_toBottomOf="@+id/typeDetail" />
 
     <TextView
-        android:id="@+id/textView16"
+        android:id="@+id/typeDetail"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="84dp"
@@ -69,24 +69,24 @@
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/cpfCnpjDetail"
         android:layout_width="58dp"
         android:layout_height="19dp"
         android:layout_marginStart="108dp"
         android:layout_marginTop="24dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/textView6"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/emailDetail" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/emailDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="124dp"
         android:layout_marginTop="16dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintTop_toBottomOf="@+id/userNameDetail" />
 
     <TextView
         android:id="@+id/textView6"
@@ -145,7 +145,7 @@
         app:layout_constraintVertical_bias="0.666" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageViewDetail"
         android:layout_width="210dp"
         android:layout_height="205dp"
         android:layout_marginTop="28dp"
@@ -156,7 +156,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view4" />
 
     <TextView
-        android:id="@+id/userDetailNameText"
+        android:id="@+id/nameDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -164,7 +164,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewDetail" />
 
     <View
         android:id="@+id/divider2"
@@ -178,7 +178,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userDetailNameText" />
+        app:layout_constraintTop_toBottomOf="@+id/nameDetail" />
 
     <View
         android:id="@+id/divider4"
@@ -189,10 +189,10 @@
         android:background="#FFFFFF"
         android:backgroundTint="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/cpfCnpjDetail" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/userNameDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"

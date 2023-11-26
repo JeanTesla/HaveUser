@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,12 +21,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserListFragment extends Fragment {
 
-    private List<UserEntity> userEntityList = new ArrayList<>();
-
     private final FragmentTransactionCallback fragmentTransactionCallback;
+
+    private UserListViewModel userListViewModel;
 
     public UserListFragment(FragmentTransactionCallback transactionCallback) {
         fragmentTransactionCallback = transactionCallback;
@@ -41,7 +44,7 @@ public class UserListFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_user_list, container, false);
 
-        UserListViewModel userListViewModel = new ViewModelProvider(this).get(UserListViewModel.class);
+        userListViewModel =  new UserListViewModel(this.getActivity().getApplication());
 
         AddUserFragment addUserFragment = new AddUserFragment();
 
@@ -54,42 +57,31 @@ public class UserListFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(userListViewAdapter);
 
-        userListViewModel.getUsers().observe(getViewLifecycleOwner(), users -> {
-            Log.i("teste", "Retorno do observable");
+        userListViewModel.userList.observe(getViewLifecycleOwner(), users -> {
+            if(Objects.isNull(users)) return;
+            Log.i("test", "Retorno do observable");
+            Log.i("test", users.get(0).getNome());
             userListViewAdapter.insertAllUsers(users);
+            userListViewAdapter.notifyDataSetChanged();
         });
 
-        addUserButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        addUserButton.setOnClickListener(v ->
                 fragmentTransactionCallback.run(addUserFragment, true)
-                        .addToBackStack("addUserFragment")
-                        .commit();
-            }
-        });
+                .addToBackStack("addUserFragment")
+                .commit());
 
         return rootView;
     }
 
-    private void openUserDetailCallback(int index) {
-        Log.i("teste", userEntityList.get(index).getNome());
-        fragmentTransactionCallback.run(new UserDatailFragment(), true)
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        userListViewModel.getUsers();
+    }
+
+    private void openUserDetailCallback(int userId) {
+        fragmentTransactionCallback.run(new UserDatailFragment(userId), true)
                 .addToBackStack("userDetailFragment")
                 .commit();
     }
 }
-
-//        new Thread(new Runnable() {
-//            public void run() {
-//                AppDatabase db = Room.databaseBuilder(
-//                        getActivity().getApplicationContext(),
-//                        AppDatabase.class,
-//                        "default-db").build();
-//
-//                List<UserEntity> userEntityList = db.userDAO().getAll();
-//
-//                for (int i = 0; i < userEntityList.size(); i++) {
-//                    Log.i("teste", userEntityList.get(i).getNome());
-//                }
-//            }
-//        }).start();

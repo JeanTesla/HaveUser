@@ -13,6 +13,15 @@ public interface UserDAO {
     @Query("SELECT * FROM userentity")
     List<UserEntity> getAll();
 
+    @Query("SELECT iif(COUNT(user_name) > 0, true, false) as result " +
+            "FROM userentity where user_name = :userName")
+    boolean userNameAlreadyExists(String userName);
+
+    @Query("SELECT * from userentity where uid = :userId")
+    UserEntity getUserById(int userId);
+
     @Insert
-    void insertAll(UserEntity... users);
+    void insert(UserEntity user);
+
+
 }
