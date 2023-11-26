@@ -1,9 +1,6 @@
 package com.example.haveuser.presentation.action.view;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,17 +50,27 @@ public class UserDatailFragment extends Fragment {
         TextView sexDetail = view.findViewById(R.id.sexDetail);
         TextView typeDetail = view.findViewById(R.id.typeDetail);
         TextView nameDetail = view.findViewById(R.id.nameDetail);
+        TextView userNameDetial = view.findViewById(R.id.userNameDetail);
 
         userDetailViewModel.findedUser.observe(getViewLifecycleOwner(), user -> {
 
-            if(Objects.isNull(user)) return;
+            if (Objects.isNull(user)) return;
 
             Log.i("test", "&&&&&&&&&&&&&&&&&&&&&");
             Log.i("test", user.getUserName());
 
             if (!user.getFoto().isEmpty()) {
-                 imageViewDetail.setImageBitmap(FileUtil.encodedBase64ToBitmap(user.getFoto()));
+                imageViewDetail.setImageBitmap(FileUtil.encodedBase64ToBitmap(user.getFoto()));
             }
+
+            nameDetail.setText(user.getNome());
+            emailDetail.setText(user.getEmail());
+            userNameDetial.setText(user.getUserName());
+            cpfCnpjDetail.setText(user.getCpfCnpj());
+            typeDetail.setText(user.getTipo().toString());
+            sexDetail.setText(user.getSexo().toString());
+            birthDateDetail.setText(user.getDataNascimento());
+
         });
 
         returnButton.setOnClickListener(new View.OnClickListener() {

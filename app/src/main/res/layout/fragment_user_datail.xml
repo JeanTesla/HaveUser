@@ -9,39 +9,49 @@
     android:background="#000000">
 
     <TextView
-        android:id="@+id/birthDateDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="16dp"
-        android:text="Tipo pessoa:"
-        app:layout_constraintStart_toEndOf="@+id/textView14"
-        app:layout_constraintTop_toBottomOf="@+id/sexDetail" />
+        android:id="@+id/typeDetail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.014"
+        app:layout_constraintStart_toEndOf="@+id/textView13"
+        app:layout_constraintTop_toBottomOf="@+id/divider4" />
 
     <TextView
         android:id="@+id/sexDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="132dp"
         android:layout_marginTop="16dp"
-        android:text="Tipo pessoa:"
+        android:textColor="#FFFFFF"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.007"
         app:layout_constraintStart_toEndOf="@+id/textView15"
         app:layout_constraintTop_toBottomOf="@+id/typeDetail" />
 
     <TextView
-        android:id="@+id/typeDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="24dp"
-        android:text="Tipo pessoa:"
-        app:layout_constraintStart_toEndOf="@+id/textView13"
-        app:layout_constraintTop_toBottomOf="@+id/divider4" />
+        android:id="@+id/birthDateDetail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="16dp"
+        android:textColor="#FFFFFF"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.007"
+        app:layout_constraintStart_toEndOf="@+id/textView14"
+        app:layout_constraintTop_toBottomOf="@+id/sexDetail" />
 
     <TextView
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:textColor="#FFFFFF"
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
         android:text="Tipo pessoa:"
@@ -53,6 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:textColor="#FFFFFF"
         android:layout_marginTop="16dp"
         android:text="Data nascimento:"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,36 +74,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:textColor="#FFFFFF"
         android:layout_marginTop="16dp"
         android:text="Sexo:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <TextView
-        android:id="@+id/cpfCnpjDetail"
-        android:layout_width="58dp"
-        android:layout_height="19dp"
-        android:layout_marginStart="108dp"
-        android:layout_marginTop="24dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/textView6"
-        app:layout_constraintTop_toBottomOf="@+id/emailDetail" />
-
-    <TextView
-        android:id="@+id/emailDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="124dp"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/userNameDetail" />
-
-    <TextView
         android:id="@+id/textView6"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:textColor="#FFFFFF"
         android:layout_marginTop="16dp"
         android:text="Cpf/Cnpj"
         app:layout_constraintStart_toStartOf="parent"
@@ -105,6 +98,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:text="E-mail:"
+        android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -114,6 +108,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
+        android:textColor="#FFFFFF"
         android:text="Nome de usuário:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
@@ -149,11 +144,12 @@
         android:layout_width="210dp"
         android:layout_height="205dp"
         android:layout_marginTop="28dp"
-        android:background="#CF1717"
         android:src="@drawable/ic_launcher_foreground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view4" />
+        app:layout_constraintTop_toBottomOf="@+id/view4"
+        app:srcCompat="@drawable/without_profile_image"
+        tools:srcCompat="@drawable/without_profile_image" />
 
     <TextView
         android:id="@+id/nameDetail"
@@ -161,6 +157,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Nome"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -193,13 +190,42 @@
 
     <TextView
         android:id="@+id/userNameDetail"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
         android:layout_marginTop="32dp"
-        android:text="TextView"
+        android:textColor="#FFFFFF"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+    <TextView
+        android:id="@+id/emailDetail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/userNameDetail" />
+
+    <TextView
+        android:id="@+id/cpfCnpjDetail"
+        android:layout_width="0dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/emailDetail" />
 
     <TextView
         android:id="@+id/textView10"
@@ -207,6 +233,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
+        android:textColor="#FFFFFF"
         android:text="Tipo pessoa:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider4" />
@@ -217,6 +244,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
+        android:textColor="#FFFFFF"
         android:text="Sexo:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -228,6 +256,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:text="Data nascimento:"
+        android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
