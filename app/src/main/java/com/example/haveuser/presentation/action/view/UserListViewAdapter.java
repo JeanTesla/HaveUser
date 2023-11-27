@@ -13,20 +13,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.haveuser.R;
-import com.example.haveuser.domain.callables.OnClickItemCallback;
+import com.example.haveuser.domain.callables.OnClickUserListItemCallback;
 import com.example.haveuser.domain.entities.UserEntity;
 import com.example.haveuser.domain.enums.TipoPessoaEnum;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserListViewAdapter extends RecyclerView.Adapter<UserListViewAdapter.ViewHolder> {
 
     private List<UserEntity> mDataSet = new ArrayList<>();
 
-    private final OnClickItemCallback mCallback;
+    private final OnClickUserListItemCallback mCallback;
 
-    public UserListViewAdapter(OnClickItemCallback callback) {
+    public UserListViewAdapter(OnClickUserListItemCallback callback) {
         mCallback = callback;
     }
 
@@ -40,13 +41,13 @@ public class UserListViewAdapter extends RecyclerView.Adapter<UserListViewAdapte
 
         private final ImageView userImageImageView;
 
-        public ViewHolder(View v, OnClickItemCallback callback) {
+        public ViewHolder(View v, OnClickUserListItemCallback callback, List<UserEntity> userEntityList) {
             super(v);
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    callback.run(getAdapterPosition() + 1);
+                    callback.run(  userEntityList.get(getAdapterPosition()).getUid());
                 }
             });
 
@@ -55,6 +56,7 @@ public class UserListViewAdapter extends RecyclerView.Adapter<UserListViewAdapte
             userTypeText = v.findViewById(R.id.userTypeText);
             userImageImageView = v.findViewById(R.id.userImageImageView);
         }
+
 
         public TextView getUserNameText() {
             return userNameText;
@@ -77,29 +79,27 @@ public class UserListViewAdapter extends RecyclerView.Adapter<UserListViewAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item, parent, false);
-
-        return new ViewHolder(v, mCallback);
+        return new ViewHolder(v, mCallback, mDataSet);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
 
         UserEntity currentUser = mDataSet.get(position);
 
         String userType = TipoPessoaEnum.FISICA.equals(currentUser.getTipo())
                 ? "Pessoa Física" : "Pessoa Jurídica";
 
-
         holder.getUserNameText().setText(currentUser.getNome());
         holder.getUserEmailText().setText(currentUser.getEmail());
         holder.getUserTypeText().setText(userType);
 
-        if (!currentUser.getFoto().isEmpty()) {
+        if (Objects.nonNull(currentUser.getFoto()) && !currentUser.getFoto().isEmpty()) {
             byte[] decodedString = Base64.decode(currentUser.getFoto(), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.getUserImageImageView().setImageBitmap(decodedByte);
         }
-
     }
 
     @Override
@@ -110,4 +110,5 @@ public class UserListViewAdapter extends RecyclerView.Adapter<UserListViewAdapte
     public void insertAllUsers(List<UserEntity> users) {
         mDataSet = users;
     }
+
 }

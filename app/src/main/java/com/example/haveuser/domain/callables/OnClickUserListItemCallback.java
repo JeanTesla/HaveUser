@@ -1,5 +1,5 @@
 package com.example.haveuser.domain.callables;
 
-public interface OnClickItemCallback {
+public interface OnClickUserListItemCallback {
     void run(int index);
 }

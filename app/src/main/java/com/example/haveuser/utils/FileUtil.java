@@ -24,27 +24,43 @@ public abstract class FileUtil {
 
     private static byte[] readBytes(Uri uri, ContentResolver resolver)
             throws IOException {
-        // this dynamically extends to take the bytes you read
+
         InputStream inputStream = resolver.openInputStream(uri);
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
 
-        // this is storage overwritten on each iteration with bytes
         int bufferSize = 1024;
         byte[] buffer = new byte[bufferSize];
 
-        // we need to know how may bytes were read to write them to the
-        // byteBuffer
         int len = 0;
         while ((len = inputStream.read(buffer)) != -1) {
             byteBuffer.write(buffer, 0, len);
         }
 
-        // and then we can return your byte array.
         return byteBuffer.toByteArray();
     }
 
     public static Bitmap encodedBase64ToBitmap(String encodedBase64){
         byte[] decodedString = Base64.decode(encodedBase64, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+    }
+
+    public static String resizeBase64Image(String base64image){
+        byte [] encodeByte=Base64.decode(base64image.getBytes(),Base64.DEFAULT);
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        options.inPurgeable = true;
+        Bitmap image = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length,options);
+
+        if(image.getHeight() <= 400 && image.getWidth() <= 400){
+            return base64image;
+        }
+        image = Bitmap.createScaledBitmap(image, 250, 250, false);
+
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG,100, baos);
+
+        byte [] b=baos.toByteArray();
+        System.gc();
+        return Base64.encodeToString(b, Base64.NO_WRAP);
+
     }
 }

@@ -37,4 +37,14 @@ public class UserListViewModel extends AndroidViewModel {
         });
     }
 
+    public void getUsersLikeName(String name){
+        AsyncTask.execute(() -> {
+            try {
+                List<UserEntity> userEntityList = userRepository.getUsersLikeName(name);
+                userList.postValue(userEntityList);
+            } catch (RuntimeException exception) {
+                Log.i("test", exception.getMessage());
+            }
+        });
+    }
 }

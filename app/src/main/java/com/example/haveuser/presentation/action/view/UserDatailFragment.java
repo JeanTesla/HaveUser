@@ -1,12 +1,12 @@
 package com.example.haveuser.presentation.action.view;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +21,7 @@ import java.util.Objects;
 
 public class UserDatailFragment extends Fragment {
 
-    private int mUserId;
+    private final int mUserId;
 
     private UserDetailViewModel userDetailViewModel;
 
@@ -43,6 +43,8 @@ public class UserDatailFragment extends Fragment {
                 new UserDetailViewModel(getActivity().getApplication());
 
         FloatingActionButton returnButton = view.findViewById(R.id.returnButton);
+        FloatingActionButton deleteUserDetail = view.findViewById(R.id.deleteUserButton);
+        FloatingActionButton editUserDetail = view.findViewById(R.id.editUserButton);
         ImageView imageViewDetail = view.findViewById(R.id.imageViewDetail);
         TextView birthDateDetail = view.findViewById(R.id.birthDateDetail);
         TextView cpfCnpjDetail = view.findViewById(R.id.cpfCnpjDetail);
@@ -56,10 +58,7 @@ public class UserDatailFragment extends Fragment {
 
             if (Objects.isNull(user)) return;
 
-            Log.i("test", "&&&&&&&&&&&&&&&&&&&&&");
-            Log.i("test", user.getUserName());
-
-            if (!user.getFoto().isEmpty()) {
+            if (Objects.nonNull(user.getFoto()) && !user.getFoto().isEmpty()) {
                 imageViewDetail.setImageBitmap(FileUtil.encodedBase64ToBitmap(user.getFoto()));
             }
 
@@ -73,14 +72,33 @@ public class UserDatailFragment extends Fragment {
 
         });
 
-        returnButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
+        userDetailViewModel.isDeletedUser.observe(getViewLifecycleOwner(), result -> {
+            if(Objects.isNull(result)) return;
+
+            Toast.makeText(getContext(), "Usuário deletado com sucesso", Toast.LENGTH_LONG)
+                    .show();
+            returnButton.callOnClick();
+        });
+
+        returnButton.setOnClickListener(v -> getActivity().getSupportFragmentManager()
+                .popBackStack());
+
+        deleteUserDetail.setOnClickListener(v -> {
+            new DeleteUserDialogFragment(this::deleteUser, mUserId).show(getParentFragmentManager(), "deleteUserDialog");
+        });
+
+        editUserDetail.setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.action_frame, new AddEditUserFragment(mUserId), "editUser")
+                    .addToBackStack("returnToUserDetial")
+                    .commit();
         });
 
         return view;
+    }
+
+    public void deleteUser(int userId){
+        userDetailViewModel.deleteUserById(userId);
     }
 
     @Override

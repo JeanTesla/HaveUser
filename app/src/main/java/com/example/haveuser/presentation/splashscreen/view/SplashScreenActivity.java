@@ -22,10 +22,10 @@ public class SplashScreenActivity extends AppCompatActivity {
             public void run() {
                 navigateToLogin();
             }
-        }, 0);
+        }, 2000);
     }
 
-    private void navigateToLogin(){
+    private void navigateToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();

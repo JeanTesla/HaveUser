@@ -7,20 +7,21 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.haveuser.data.repository.UserRepository;
 import com.example.haveuser.domain.entities.UserEntity;
 import com.vicmikhailau.maskededittext.MaskedEditText;
 
-public class AddUserViewModel extends AndroidViewModel {
+public class AddEditUserViewModel extends AndroidViewModel {
 
+    public MutableLiveData<UserEntity> findedUser = new MutableLiveData<>(null);
     public MutableLiveData<Boolean> isPersisted = new MutableLiveData<>(null);
+    public MutableLiveData<Boolean> isUpdated = new MutableLiveData<>(null);
 
     private final UserRepository userRepository;
 
-    public AddUserViewModel(@NonNull Application application) {
+    public AddEditUserViewModel(@NonNull Application application) {
         super(application);
         this.userRepository = new UserRepository(application);
     }
@@ -34,6 +35,34 @@ public class AddUserViewModel extends AndroidViewModel {
                 }
                 userRepository.persistUser(user);
                 isPersisted.postValue(true);
+            } catch (RuntimeException exception) {
+                Log.i("test", exception.getMessage());
+            }
+        });
+    }
+
+    public void updateUser(UserEntity user, int userId){
+        AsyncTask.execute(() -> {
+            try {
+
+                if(userRepository.isOwnerOfUserName(user.getUserName(), userId)){
+                    Log.i("test", "&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                    user.setUid(userId);
+                    userRepository.updateUser(user);
+                    isUpdated.postValue(true);
+                }
+
+            } catch (RuntimeException exception) {
+                Log.i("test", exception.getMessage());
+            }
+        });
+    }
+
+    public void getUser(int userId){
+        AsyncTask.execute(() -> {
+            try {
+                UserEntity user = userRepository.getUserById(userId);
+                findedUser.postValue(user);
             } catch (RuntimeException exception) {
                 Log.i("test", exception.getMessage());
             }

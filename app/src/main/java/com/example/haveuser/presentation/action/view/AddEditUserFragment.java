@@ -20,7 +20,7 @@ import com.example.haveuser.R;
 import com.example.haveuser.domain.entities.UserEntity;
 import com.example.haveuser.domain.enums.SexoEnum;
 import com.example.haveuser.domain.enums.TipoPessoaEnum;
-import com.example.haveuser.presentation.action.viewmodel.AddUserViewModel;
+import com.example.haveuser.presentation.action.viewmodel.AddEditUserViewModel;
 import com.example.haveuser.utils.FileUtil;
 import com.example.haveuser.utils.MaskUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,7 +29,7 @@ import com.vicmikhailau.maskededittext.MaskedEditText;
 
 import java.util.Objects;
 
-public class AddUserFragment extends Fragment {
+public class AddEditUserFragment extends Fragment {
 
     private EditText loginNameEditText;
 
@@ -51,14 +51,18 @@ public class AddUserFragment extends Fragment {
 
     private SwitchCompat typeSwitch;
 
-    private AddUserViewModel addUserViewModel;
+    private AddEditUserViewModel addEditUserViewModel;
 
     private SwitchCompat sexSwitch;
 
     private Uri pickedImageUri;
 
-    public AddUserFragment() {
-        // Required empty public constructor
+    private Integer mUserId;
+
+    public AddEditUserFragment() {}
+
+    public AddEditUserFragment(int userId) {
+        this.mUserId = userId;
     }
 
     @Override
@@ -71,24 +75,7 @@ public class AddUserFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_add_user, container, false);
 
-        addUserViewModel = new AddUserViewModel(this.getActivity().getApplication());
-
-        addUserViewModel.isPersisted.observe(getViewLifecycleOwner(), result -> {
-
-            if (Objects.isNull(result)) return;
-
-            if (!result) {
-                Toast.makeText(
-                        getContext(), "Já existe um usuário com esse nome de usuário",
-                        Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            Toast.makeText(getContext(), "Usuário cadastrado com sucesso!", Toast.LENGTH_LONG)
-                    .show();
-
-            getActivity().getSupportFragmentManager().popBackStack();
-        });
+        addEditUserViewModel = new AddEditUserViewModel(this.getActivity().getApplication());
 
         FloatingActionButton returnButton = rootView.findViewById(R.id.returnButtonAddUserFrag);
 
@@ -105,6 +92,63 @@ public class AddUserFragment extends Fragment {
         birthDateEditText = rootView.findViewById(R.id.birthDateEditText);
         emailEditText = rootView.findViewById(R.id.emailEditText);
         publicPlaceEditText = rootView.findViewById(R.id.publicPlaceEditText);
+
+
+        if(Objects.nonNull(mUserId)){
+            addEditUserViewModel.getUser(mUserId);
+            submitButton.setText("Salvar edição");
+        }
+
+        addEditUserViewModel.findedUser.observe(getViewLifecycleOwner(), user -> {
+
+            if(Objects.isNull(user)) return;
+
+            if(Objects.nonNull(user.getFoto())){
+                imagePickerButton.setImageBitmap(FileUtil.encodedBase64ToBitmap(user.getFoto()));
+            }
+
+            loginNameEditText.setText(user.getUserName());
+            passwordEditText.setText(user.getPassword());
+            nameEditText.setText(user.getNome());
+            cpfCnpjEditText.setText(user.getCpfCnpj());
+            birthDateEditText.setText(user.getDataNascimento());
+            emailEditText.setText(user.getEmail());
+            publicPlaceEditText.setText(user.getEndereco());
+        });
+
+        addEditUserViewModel.isPersisted.observe(getViewLifecycleOwner(), result -> {
+
+            if (Objects.isNull(result)) return;
+
+            if (!result) {
+                Toast.makeText(
+                        getContext(), "Já existe um usuário com esse nome de usuário",
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            Toast.makeText(getContext(), "Usuário cadastrado com sucesso!", Toast.LENGTH_LONG)
+                    .show();
+
+            getActivity().getSupportFragmentManager().popBackStack();
+        });
+
+        addEditUserViewModel.isUpdated.observe(getViewLifecycleOwner(), result -> {
+
+            if (Objects.isNull(result)) return;
+
+            if (!result) {
+                Toast.makeText(
+                        getContext(), "Erro ao tentar alterar esse usuário.",
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            Toast.makeText(getContext(), "Usuário alterado com sucesso!", Toast.LENGTH_LONG)
+                    .show();
+
+            getActivity().getSupportFragmentManager().popBackStack();
+        });
 
         ActivityResultLauncher<PickVisualMediaRequest> pickMedia = registerForActivityResult(
                 new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -160,6 +204,8 @@ public class AddUserFragment extends Fragment {
 
     private void saveUser() {
 
+        boolean isEdition = Objects.nonNull(mUserId);
+
         if (!validateAllFields()) {
             Toast.makeText(getContext(), "Dados inválidos, verifique os alertas nos campos.", Toast.LENGTH_LONG).show();
             return;
@@ -168,35 +214,42 @@ public class AddUserFragment extends Fragment {
         String base64EncodedPhoto = "";
 
         if (Objects.nonNull(pickedImageUri)) {
-            base64EncodedPhoto = FileUtil.fileUriToBase64(pickedImageUri,
-                    getContext().getContentResolver()
+            base64EncodedPhoto = FileUtil.resizeBase64Image(
+                    FileUtil.fileUriToBase64(pickedImageUri,
+                            getContext().getContentResolver()
+                    )
             );
         }
 
-        addUserViewModel.persistUser(
-                new UserEntity(
-                        nameEditText.getText().toString(),
-                        loginNameEditText.getText().toString(),
-                        passwordEditText.getText().toString(),
-                        base64EncodedPhoto,
-                        publicPlaceEditText.getText().toString(),
-                        emailEditText.getText().toString(),
-                        birthDateEditText.getText().toString(),
-                        sexSwitch.isChecked() ? SexoEnum.MASCULINO : SexoEnum.FEMININO,
-                        typeSwitch.isChecked() ? TipoPessoaEnum.JURIDICA : TipoPessoaEnum.FISICA,
-                        cpfCnpjEditText.getText().toString()
-                )
+        UserEntity currentUserData = new UserEntity(
+                nameEditText.getText().toString(),
+                loginNameEditText.getText().toString(),
+                passwordEditText.getText().toString(),
+                base64EncodedPhoto,
+                publicPlaceEditText.getText().toString(),
+                emailEditText.getText().toString(),
+                birthDateEditText.getText().toString(),
+                sexSwitch.isChecked() ? SexoEnum.MASCULINO : SexoEnum.FEMININO,
+                typeSwitch.isChecked() ? TipoPessoaEnum.JURIDICA : TipoPessoaEnum.FISICA,
+                cpfCnpjEditText.getText().toString()
         );
+
+        if(isEdition){
+            addEditUserViewModel.updateUser(currentUserData, mUserId);
+        }else{
+            addEditUserViewModel.persistUser(currentUserData);
+        }
+
     }
 
     private boolean validateAllFields() {
-        return addUserViewModel.validateUserName(loginNameEditText) &&
-                addUserViewModel.validatePassword(passwordEditText) &&
-                addUserViewModel.validateName(nameEditText) &&
-                addUserViewModel.validateCpfAndCnpj(typeSwitch.isChecked(), cpfCnpjEditText) &&
-                addUserViewModel.validateBirthDate(typeSwitch.isChecked(), birthDateEditText) &&
-                addUserViewModel.validateEmail(emailEditText) &&
-                addUserViewModel.validatePublicPlace(publicPlaceEditText);
+        return addEditUserViewModel.validateUserName(loginNameEditText) &&
+                addEditUserViewModel.validatePassword(passwordEditText) &&
+                addEditUserViewModel.validateName(nameEditText) &&
+                addEditUserViewModel.validateCpfAndCnpj(typeSwitch.isChecked(), cpfCnpjEditText) &&
+                addEditUserViewModel.validateBirthDate(typeSwitch.isChecked(), birthDateEditText) &&
+                addEditUserViewModel.validateEmail(emailEditText) &&
+                addEditUserViewModel.validatePublicPlace(publicPlaceEditText);
     }
 
 }

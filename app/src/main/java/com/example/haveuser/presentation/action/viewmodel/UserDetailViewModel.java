@@ -14,6 +14,7 @@ import com.example.haveuser.domain.entities.UserEntity;
 public class UserDetailViewModel extends AndroidViewModel {
 
     public MutableLiveData<UserEntity> findedUser = new MutableLiveData<>(null);
+    public MutableLiveData<Boolean> isDeletedUser = new MutableLiveData<>(null);
 
     private UserRepository userRepository;
     public UserDetailViewModel(@NonNull Application application) {
@@ -26,6 +27,17 @@ public class UserDetailViewModel extends AndroidViewModel {
             try {
                 UserEntity user = userRepository.getUserById(userId);
                 findedUser.postValue(user);
+            } catch (RuntimeException exception) {
+                Log.i("test", exception.getMessage());
+            }
+        });
+    }
+
+    public void deleteUserById(int userId){
+        AsyncTask.execute(() -> {
+            try {
+                userRepository.deleteUserById(userId);
+                isDeletedUser.postValue(true);
             } catch (RuntimeException exception) {
                 Log.i("test", exception.getMessage());
             }
